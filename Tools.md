@@ -6,6 +6,10 @@
 * <https://unity3d.com/get-unity/download>
 * <https://www.unrealengine.com>
 
+## Среды разработки
+
+* <https://visualstudio.microsoft.com/downloads>
+
 ## Генераторы текстур и карт нормалей
 
 * <https://cpetry.github.io/TextureGenerator-Online>
