@@ -5,17 +5,21 @@ public enum EnemyState
 {
     Patrolling,
     Chasing,
-    Returning
+    Returning,
+    Attacking
 }
 
-public class EnemyController : MonoBehaviour
+public class SmartEnemyController : MonoBehaviour
 {
     public float MinDistanceToFollow = 10.0f;
     public float MinDistanceToPatrolPoint = 2.0f;
+    public float MinDistanceToAttack = 0.5f;
 
     public GameObject PointToPatroll;
     public float patrollAreaRadius = 4.0f;
     public GameObject target;
+
+    public float timeToDestroy = 2;
 
     NavMeshAgent agent;
     EnemyState state;
@@ -28,17 +32,20 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (state == EnemyState.Patrolling)
+        switch (state)
         {
-            Patrol();
-        }
-        else if (state == EnemyState.Chasing)
-        {
-            Chasing();
-        }
-        else if (state == EnemyState.Returning)
-        {
-            Return();
+            case EnemyState.Patrolling:
+                Patrol();
+                break;
+            case EnemyState.Chasing:
+                Chase();
+                break;
+            case EnemyState.Attacking:
+                Attack();
+                break;
+            case EnemyState.Returning:
+                Return();
+                break;
         }
     }
 
@@ -64,7 +71,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Chasing()
+    private void Chase()
     {
         if (!agent.hasPath)
         {
@@ -77,6 +84,19 @@ public class EnemyController : MonoBehaviour
             state = EnemyState.Returning;
             agent.ResetPath();
         }
+        else if (distance <= MinDistanceToAttack)
+        {
+            state = EnemyState.Attacking;
+            agent.ResetPath();
+        }
+    }
+
+    private void Attack()
+    {
+        Destroy(target, timeToDestroy);
+
+        state = EnemyState.Returning;
+        agent.ResetPath();
     }
 
     private void Return()
