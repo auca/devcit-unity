@@ -54,11 +54,14 @@ public class SmartEnemyController : MonoBehaviour
             Vector2 randomPoint = Random.insideUnitCircle;
             randomPoint *= patrollAreaRadius;
 
-            Vector3 destination = PointToPatroll.transform.position;
-            destination.x += randomPoint.x;
-            destination.z += randomPoint.y;
+            if (PointToPatroll != null)
+            {
+                Vector3 destination = PointToPatroll.transform.position;
+                destination.x += randomPoint.x;
+                destination.z += randomPoint.y;
 
-            agent.SetDestination(destination);
+                agent.SetDestination(destination);
+            }
         }
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
@@ -98,8 +101,11 @@ public class SmartEnemyController : MonoBehaviour
     {
         if (!agent.hasPath)
         {
-            Vector3 destination = PointToPatroll.transform.position;
-            agent.SetDestination(destination);
+            if (PointToPatroll != null)
+            {
+                Vector3 destination = PointToPatroll.transform.position;
+                agent.SetDestination(destination);
+            }
         }
 
         if (Vector3.Distance(transform.position, target.transform.position) < MinDistanceToFollow)
@@ -107,10 +113,15 @@ public class SmartEnemyController : MonoBehaviour
             state = EnemyState.Chasing;
             agent.ResetPath();
         }
-        else if (Vector3.Distance(transform.position, PointToPatroll.transform.position) < MinDistanceToPatrolPoint)
+
+
+        if (PointToPatroll != null)
         {
-            state = EnemyState.Patrolling;
-            agent.ResetPath();
+            if (Vector3.Distance(transform.position, PointToPatroll.transform.position) < MinDistanceToPatrolPoint)
+            {
+                state = EnemyState.Patrolling;
+                agent.ResetPath();
+            }
         }
     }
 }
