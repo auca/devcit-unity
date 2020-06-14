@@ -19,8 +19,6 @@ public class SmartEnemyController : MonoBehaviour
     public float patrollAreaRadius = 4.0f;
     public GameObject target;
 
-    public float timeToDestroy = 2;
-
     NavMeshAgent agent;
     EnemyState state;
 
@@ -73,10 +71,7 @@ public class SmartEnemyController : MonoBehaviour
 
     private void Chase()
     {
-        if (!agent.hasPath)
-        {
-            agent.SetDestination(target.transform.position);
-        }
+        agent.SetDestination(target.transform.position);
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance >= MinDistanceToFollow)
@@ -93,7 +88,7 @@ public class SmartEnemyController : MonoBehaviour
 
     private void Attack()
     {
-        Destroy(target, timeToDestroy);
+        // TODO
 
         state = EnemyState.Returning;
         agent.ResetPath();
